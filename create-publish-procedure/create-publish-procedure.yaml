@@ -1,0 +1,25 @@
+config:
+  target: "${API_BASE_URL}"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+  processor: "./processor.js"
+  defaults:
+    headers:
+      Authorization: "Bearer ${JWT_TOKEN}"
+
+scenarios:
+  - flow:
+      - function: "addTimestamp"
+      - post:
+          url: "/tramites"
+          json: "{{ requestBody }}"
+          capture:
+            - json: "$.datos.id"  # Captura el id dentro del campo 'datos'
+              as: id
+
+      - log: "El ID capturado es: {{ id }}"
+
+      - patch:
+          url: "/tramites/{{ id }}/publicar"
+          json: "{{ requestBody }}"

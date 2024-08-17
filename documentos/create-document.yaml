@@ -1,0 +1,30 @@
+config:
+  target: "${API_BASE_URL}"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+    - duration: 120
+      arrivalRate: 20
+
+    - duration: 180
+      arrivalRate: 50
+
+    - duration: 60
+      arrivalRate: 5
+  processor: "./processor.js"
+  defaults:
+    headers:
+      Authorization: "Bearer ${JWT_TOKEN}"
+
+scenarios:
+  - flow:
+      - function: "getDocumentData"
+      - post:
+          url: "/documentos"
+          json: "{{ documentBody }}"
+          capture:
+            - json: "$.datos.id"  # Captura el id dentro del campo 'datos'
+              as: id
+
+      - log: "El ID capturado es: {{ id }}"
