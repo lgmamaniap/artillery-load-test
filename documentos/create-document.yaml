@@ -1,5 +1,5 @@
 config:
-  target: "${API_BASE_URL}"
+  target: "{{ $env.API_BASE_URL }}"
   phases:
     - duration: 60
       arrivalRate: 10
@@ -15,7 +15,7 @@ config:
   processor: "./processor.js"
   defaults:
     headers:
-      Authorization: "Bearer ${JWT_TOKEN}"
+      Authorization: "Bearer {{ $env.JWT_TOKEN }}"
 
 scenarios:
   - flow:
